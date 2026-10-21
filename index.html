@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReelForge | YouTube to Reel Planner</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2e;--panel2:#18233b;--line:#2a3856;--text:#f4f7ff;--muted:#a7b4ce;--accent:#ff5b78;--accent2:#ff9b54;--good:#48d6a0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#25214a 0,#0b1020 48%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1180px;margin:auto;padding:28px 18px 60px}.hero{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}.eyebrow{text-transform:uppercase;letter-spacing:.16em;color:#ff9cae;font-size:11px;font-weight:800}.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.05;margin:8px 0}.hero p{color:var(--muted);max-width:680px;margin:10px 0 0}.logo{width:56px;height:56px;flex-shrink:0;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-size:26px;box-shadow:0 10px 40px #ff5b7833}
+.layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:20px;align-items:start}.panel{background:#121a2eeF;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 18px 50px #0002}.panel h2{font-size:18px;margin:0 0 5px}.sub{color:var(--muted);font-size:13px;margin:0 0 18px}.video-card{background:#0e1628;border:1px solid var(--line);border-radius:16px;padding:15px;margin:14px 0}.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.card-head strong{font-size:14px}.pill{border:1px solid #344464;color:#c6d5f0;border-radius:999px;padding:4px 9px;font-size:11px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field.full{grid-column:1/-1}label{font-size:12px;color:#c4cee1;font-weight:650}input,select{width:100%;min-width:0;background:#0a1120;border:1px solid #34415d;color:var(--text);border-radius:10px;padding:11px 12px;font:inherit;outline:none}input:focus,select:focus{border-color:#ff7890;box-shadow:0 0 0 3px #ff5b781a}input[type=file]{font-size:12px;padding:9px}.hint{color:#8292b0;font-size:11px}.btns{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.btn{border:1px solid #3a4968;background:#202c46;color:var(--text);border-radius:11px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}.btn:hover{filter:brightness(1.12)}.btn.primary{background:linear-gradient(120deg,var(--accent),#ff805d);border:0;color:#fff}.btn.ghost{background:transparent}.btn.danger{color:#ff9cac}.btn:disabled{opacity:.45;cursor:not-allowed}
+.preview-sticky{position:sticky;top:14px}.preview-frame{width:min(100%,310px);aspect-ratio:9/16;background:#05070c;border:1px solid #394866;border-radius:22px;overflow:hidden;margin:16px auto 12px;position:relative;display:grid;place-items:center}.preview-frame video,.preview-frame iframe{width:100%;height:100%;border:0;object-fit:cover}.preview-frame iframe{position:absolute;inset:0}.overlay{position:absolute;left:7%;right:7%;bottom:13%;text-align:center;font-weight:900;font-size:clamp(16px,3vw,25px);line-height:1.12;color:white;text-shadow:0 2px 4px #000,0 0 12px #000;overflow-wrap:anywhere;pointer-events:none;white-space:pre-wrap}.empty{color:#8494b2;text-align:center;padding:24px}.status{font-size:12px;color:var(--muted);min-height:20px}.progress{height:6px;background:#26334e;border-radius:99px;overflow:hidden;margin:8px 0 12px}.progress span{height:100%;display:block;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .2s}.notice{font-size:12px;color:#d4def0;background:#0d1527;border:1px solid #2a3958;padding:12px;border-radius:12px;margin-top:15px}.notice strong{color:#fff}.small{font-size:12px;color:var(--muted)}.summary{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #26334e}.summary:last-child{border:0}.summary span{color:var(--muted)}.tag{font-size:11px;color:#a9f2d5;background:#153b35;padding:4px 8px;border-radius:99px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.preview-sticky{position:static}.preview-frame{width:min(72vw,280px)}.hero{align-items:flex-start}.panel{padding:15px}}@media(max-width:430px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.hero h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div><div class="eyebrow">Creator toolkit · browser-based</div><h1>ReelForge <span style="color:#ff8194">✦</span></h1><p>Collect your moments, trim the good bits, add a caption, and line everything up for a vertical Reel.</p></div>
+    <div class="logo" aria-hidden="true">▶</div>
+  </header>
+  <div class="layout">
+    <main class="panel">
+      <h2>01 / Build your clip list</h2>
+      <p class="sub">Add videos, then add up to 8 time ranges for each video. Times accept seconds or HH:MM:SS.</p>
+      <div id="videos"></div>
+      <div class="btns">
+        <button class="btn" id="addVideo">＋ Add another video</button>
+        <button class="btn ghost" id="clearAll">Clear all</button>
+      </div>
+      <div class="notice"><strong>How export works:</strong> YouTube links are used for reference and preview only. To create a downloadable video, attach the matching video file that you own or have permission to use. This static GitHub Pages version does not download videos from YouTube.</div>
+      <div class="btns" style="margin-top:18px">
+        <button class="btn primary" id="previewAll">▶ Preview sequence</button>
+        <button class="btn" id="exportPlan">Export clip plan (.json)</button>
+      </div>
+      <p class="small" style="margin-top:10px">The preview plays the attached local clips in order when files are provided. Without a local file, use “Open YouTube preview” on the clip card.</p>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+      <div class="progress"><span id="progress"></span></div>
+    </main>
+    <aside class="panel preview-sticky">
+      <h2>02 / Reel preview</h2>
+      <p class="sub">Vertical 9:16 framing · overlay text preview</p>
+      <div class="preview-frame" id="previewFrame">
+        <video id="player" playsinline controls></video>
+        <div class="overlay" id="overlay"></div>
+      </div>
+      <div class="summary"><span>Format</span><strong>9:16 vertical</strong></div>
+      <div class="summary"><span>Target canvas</span><strong>1080 × 1920</strong></div>
+      <div class="summary"><span>Clips queued</span><strong id="clipCount">0</strong></div>
+      <div class="summary"><span>Estimated duration</span><strong id="duration">0 sec</strong></div>
+      <div class="btns">
+        <button class="btn" id="stopPreview">■ Stop preview</button>
+      </div>
+      <div class="notice">Tip: for the cleanest Reel, use portrait source footage. Landscape clips are center-cropped in this preview, so keep faces and important details near the middle.</div>
+    </aside>
+  </div>
+</div>
+<script>
+(() => {
+  const MAX_SEGMENTS = 8;
+  const videosEl = document.getElementById('videos');
+  const player = document.getElementById('player');
+  const overlay = document.getElementById('overlay');
+  const status = document.getElementById('status');
+  const progress = document.getElementById('progress');
+  let videoId = 0, playing = false, playToken = 0, objectUrls = [];
+
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function timeToSeconds(value) {
+    const s = String(value || '').trim();
+    if (!s) return NaN;
+    if (/^\d+(\.\d+)?$/.test(s)) return Number(s);
+    const parts = s.split(':').map(Number);
+    if (parts.some(n => !Number.isFinite(n) || n < 0) || parts.length > 3) return NaN;
+    return parts.reduce((acc, n) => acc * 60 + n, 0);
+  }
+  function secondsToLabel(n) {
+    if (!Number.isFinite(n) || n < 0) return '0 sec';
+    const total = Math.round(n), h = Math.floor(total/3600), m = Math.floor(total%3600/60), s = total%60;
+    return h ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
+  }
+  function youtubeId(url) {
+    try {
+      const u = new URL(url);
+      if (u.hostname.includes('youtu.be')) return u.pathname.split('/').filter(Boolean)[0] || '';
+      if (u.hostname.includes('youtube.com')) return u.searchParams.get('v') || u.pathname.split('/').filter(Boolean).slice(-1)[0] || '';
+    } catch {}
+    return '';
+  }
+  function addVideo(data = {}) {
+    const id = ++videoId;
+    const card = document.createElement('section');
+    card.className = 'video-card';
+    card.dataset.videoId = id;
+    card.innerHTML = `
+      <div class="card-head"><strong>Video ${id}</strong><span class="pill" data-segment-count>1 / ${MAX_SEGMENTS} segments</span></div>
+      <div class="fields">
+        <div class="field full"><label>YouTube link</label><input type="url" data-youtube placeholder="https://www.youtube.com/watch?v=…" value="${esc(data.youtube || '')}"></div>
+        <div class="field full"><label>Local video file for preview / editing</label><input type="file" data-file accept="video/*"><span class="hint">Optional. Needed for local sequential preview; this file stays in your browser.</span></div>
+      </div>
+      <div data-segments></div>
+      <div class="btns"><button class="btn" data-add-segment>＋ Add time range</button><button class="btn ghost" data-open-youtube>Open YouTube preview ↗</button><button class="btn danger" data-remove-video>Remove video</button></div>`;
+    videosEl.appendChild(card);
+    card.querySelector('[data-add-segment]').addEventListener('click', () => addSegment(card));
+    card.querySelector('[data-remove-video]').addEventListener('click', () => { card.remove(); updateSummary(); });
+    card.querySelector('[data-open-youtube]').addEventListener('click', () => {
+      const id = youtubeId(card.querySelector('[data-youtube]').value);
+      if (!id) return setStatus('Enter a valid YouTube URL first.');
+      window.open(`https://www.youtube.com/watch?v=${encodeURIComponent(id)}`, '_blank', 'noopener');
+    });
+    card.querySelector('[data-youtube]').addEventListener('input', updateSummary);
+    card.querySelector('[data-file]').addEventListener('change', () => {
+      const f = card.querySelector('[data-file]').files[0];
+      card.dataset.fileName = f ? f.name : '';
+      updateSummary();
+    });
+    addSegment(card, data.segment || {});
+    updateSummary();
+    return card;
+  }
+  function addSegment(card, data = {}) {
+    const holder = card.querySelector('[data-segments]');
+    if (holder.children.length >= MAX_SEGMENTS) {
+      setStatus(`Each video can have up to ${MAX_SEGMENTS} time ranges.`);
+      return;
+    }
+    const n = holder.children.length + 1;
+    const seg = document.createElement('div');
+    seg.className = 'video-card';
+    seg.style.margin = '10px 0 0';
+    seg.style.background = '#131e33';
+    seg.dataset.segment = 'true';
+    seg.innerHTML = `
+      <div class="card-head"><strong>Clip ${n}</strong><span class="pill">Trim range</span></div>
+      <div class="fields">
+        <div class="field"><label>From time</label><input data-start value="${esc(data.start || '00:00')}" placeholder="00:15 or 15"></div>
+        <div class="field"><label>To time</label><input data-end value="${esc(data.end || '00:30')}" placeholder="00:28 or 28"></div>
+        <div class="field full"><label>Write on video (optional)</label><input data-text maxlength="140" value="${esc(data.text || '')}" placeholder="e.g. A moment worth keeping ✨"></div>
+      </div>
+      <div class="btns"><button class="btn ghost" data-remove-segment>Remove this range</button></div>`;
+    holder.appendChild(seg);
+    seg.querySelector('[data-remove-segment]').addEventListener('click', () => {
+      if (holder.children.length === 1) return setStatus('Keep at least one time range per video.');
+      seg.remove(); renumberSegments(card); updateSummary();
+    });
+    seg.querySelectorAll('input').forEach(i => i.addEventListener('input', updateSummary));
+    renumberSegments(card); updateSummary();
+  }
+  function renumberSegments(card) {
+    const segs = [...card.querySelectorAll('[data-segment]')];
+    segs.forEach((seg, i) => seg.querySelector('.card-head strong').textContent = `Clip ${i+1}`);
+    card.querySelector('[data-segment-count]').textContent = `${segs.length} / ${MAX_SEGMENTS} segments`;
+    card.querySelector('[data-add-segment]').disabled = segs.length >= MAX_SEGMENTS;
+  }
+  function collect() {
+    const result = [];
+    [...videosEl.querySelectorAll(':scope > .video-card')].forEach((card, vi) => {
+      const url = card.querySelector('[data-youtube]').value.trim();
+      const fileInput = card.querySelector('[data-file]');
+      const file = fileInput.files[0] || null;
+      [...card.querySelectorAll('[data-segment]')].forEach((seg, si) => {
+        const startRaw = seg.querySelector('[data-start]').value;
+        const endRaw = seg.querySelector('[data-end]').value;
+        const start = timeToSeconds(startRaw), end = timeToSeconds(endRaw);
+        result.push({
+          videoNumber: vi+1, clipNumber: si+1, youtubeUrl: url,
+          youtubeId: youtubeId(url), start, end, startInput: startRaw, endInput: endRaw,
+          text: seg.querySelector('[data-text]').value.trim(),
+          file, fileName: file ? file.name : ''
+        });
+      });
+    });
+    return result;
+  }
+  function updateSummary() {
+    const clips = collect();
+    document.getElementById('clipCount').textContent = clips.length;
+    const valid = clips.filter(c => Number.isFinite(c.start) && Number.isFinite(c.end) && c.end > c.start);
+    document.getElementById('duration').textContent = secondsToLabel(valid.reduce((n,c)=>n+c.end-c.start,0));
+  }
+  function setStatus(message) { status.textContent = message; }
+  function waitEvent(el, name, token) {
+    return new Promise((resolve, reject) => {
+      const cleanup = () => { el.removeEventListener(name, done); el.removeEventListener('error', fail); };
+      const done = () => { cleanup(); resolve(); };
+      const fail = () => { cleanup(); reject(new Error('The selected video could not be loaded.')); };
+      el.addEventListener(name, done, {once:true}); el.addEventListener('error', fail, {once:true});
+      if (token !== playToken) { cleanup(); reject(new Error('Preview stopped.')); }
+    });
+  }
+  async function playSequence() {
+    const token = ++playToken;
+    const clips = collect();
+    const invalid = clips.find(c => !Number.isFinite(c.start) || !Number.isFinite(c.end) || c.start < 0 || c.end <= c.start);
+    if (!clips.length) return setStatus('Add at least one clip first.');
+    if (invalid) return setStatus(`Check the start/end time for Video ${invalid.videoNumber}, Clip ${invalid.clipNumber}. End time must be after start time.`);
+    const missing = clips.find(c => !c.file);
+    if (missing) {
+      if (missing.youtubeId) {
+        const url = `https://www.youtube.com/embed/${encodeURIComponent(missing.youtubeId)}?start=${Math.floor(missing.start)}&end=${Math.floor(missing.end)}&autoplay=1&playsinline=1`;
+        const frame = document.getElementById('previewFrame');
+        player.pause(); player.style.display = 'none';
+        let iframe = frame.querySelector('iframe');
+        if (!iframe) { iframe = document.createElement('iframe'); iframe.allow = 'autoplay; encrypted-media; picture-in-picture'; iframe.allowFullscreen = true; frame.insertBefore(iframe, overlay); }
+        iframe.src = url; overlay.textContent = missing.text;
+        return setStatus(`YouTube preview opened for Video ${missing.videoNumber}, Clip ${missing.clipNumber}. Attach local files to preview the full sequence.`);
+      }
+      return setStatus(`Attach a local video file to Video ${missing.videoNumber} to preview the full sequence.`);
+    }
+    const frame = document.getElementById('previewFrame');
+    const iframe = frame.querySelector('iframe'); if (iframe) iframe.remove();
+    player.style.display = 'block'; player.controls = false; playing = true;
+    try {
+      for (let i=0; i<clips.length; i++) {
+        if (token !== playToken) throw new Error('Preview stopped.');
+        const c = clips[i];
+        const card = [...videosEl.querySelectorAll(':scope > .video-card')][c.videoNumber-1];
+        const file = card.querySelector('[data-file]').files[0];
+        const src = URL.createObjectURL(file); objectUrls.push(src);
+        player.src = src; player.load();
+        await waitEvent(player, 'loadedmetadata', token);
+        player.currentTime = Math.min(c.start, Math.max(0, player.duration - 0.1));
+        await waitEvent(player, 'seeked', token).catch(()=>{});
+        overlay.textContent = c.text;
+        progress.style.width = `${Math.round(i/clips.length*100)}%`;
+        await player.play();
+        await new Promise((resolve, reject) => {
+          const tick = () => {
+            if (token !== playToken) { player.pause(); reject(new Error('Preview stopped.')); return; }
+            if (player.currentTime >= c.end || player.ended) { player.pause(); resolve(); return; }
+            requestAnimationFrame(tick);
+          };
+          tick();
+        });
+        URL.revokeObjectURL(src); objectUrls = objectUrls.filter(u => u !== src);
+      }
+      if (token === playToken) { progress.style.width = '100%'; setStatus('Sequence preview complete.'); }
+    } catch (e) {
+      if (token === playToken) setStatus(e.message || 'Could not play this sequence.');
+    } finally {
+      if (token === playToken) { playing = false; player.controls = true; }
+    }
+  }
+  document.getElementById('addVideo').addEventListener('click', () => addVideo());
+  document.getElementById('clearAll').addEventListener('click', () => {
+    stopPreview(); videosEl.innerHTML = ''; videoId = 0; addVideo(); setStatus('Clip list cleared.'); progress.style.width = '0%';
+  });
+  document.getElementById('previewAll').addEventListener('click', playSequence);
+  document.getElementById('stopPreview').addEventListener('click', stopPreview);
+  function stopPreview() {
+    playToken++; playing = false; player.pause(); player.removeAttribute('src'); player.load();
+    objectUrls.forEach(u => URL.revokeObjectURL(u)); objectUrls = [];
+    const iframe = document.querySelector('#previewFrame iframe'); if (iframe) iframe.remove();
+    player.style.display = 'block'; player.controls = true; overlay.textContent = '';
+    progress.style.width = '0%'; setStatus('Preview stopped.');
+  }
+  document.getElementById('exportPlan').addEventListener('click', () => {
+    const clips = collect();
+    if (!clips.length) return setStatus('Add at least one clip before exporting the plan.');
+    const payload = {
+      app: 'ReelForge', version: 1, aspectRatio: '9:16', targetResolution: '1080x1920',
+      note: 'YouTube links are references only. Use authorized local video files for actual editing/export.',
+      clips: clips.map(({file, ...c}) => c)
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob); const a = document.createElement('a');
+    a.href = url; a.download = 'reelforge-clip-plan.json'; a.click(); URL.revokeObjectURL(url);
+    setStatus('Clip plan downloaded as JSON.');
+  });
+  addVideo();
+})();
+</script>
+</body>
+</html>
